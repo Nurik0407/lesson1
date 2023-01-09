@@ -1,0 +1,174 @@
+Last login: Mon Jan  9 08:58:15 on ttys000
+/Library/PostgreSQL/14/scripts/runpsql.sh; exit
+MacBook-Air-Mac:~ mac$ /Library/PostgreSQL/14/scripts/runpsql.sh; exit
+Server [localhost]:
+Database [postgres]:
+Port [5432]:
+Username [postgres]: postgres
+Password for user postgres:
+psql (14.6)
+Type "help" for help.
+
+postgres=# create table animals(id serial primary key,name varchar not null,gender varchar);
+CREATE TABLE
+postgres-# \d animals
+                                 Table "public.animals"
+ Column |       Type        | Collation | Nullable |               Default
+--------+-------------------+-----------+----------+-------------------------------------
+ id     | integer           |           | not null | nextval('animals_id_seq'::regclass)
+ name   | character varying |           | not null |
+ gender | character varying |           |          |
+Indexes:
+    "animals_pkey" PRIMARY KEY, btree (id)
+
+...skipping...
+                                 Table "public.animals"
+ Column |       Type        | Collation | Nullable |               Default
+--------+-------------------+-----------+----------+-------------------------------------
+ id     | integer           |           | not null | nextval('animals_id_seq'::regclass)
+ name   | character varying |           | not null |
+ gender | character varying |           |          |
+Indexes:
+    "animals_pkey" PRIMARY KEY, btree (id)
+
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+postgres-# insert into animals(name,gender)values('Cow','male');
+ERROR:  syntax error at or near "/"
+LINE 1: /d animals
+        ^
+postgres=# \d animals
+                                 Table "public.animals"
+ Column |       Type        | Collation | Nullable |               Default
+--------+-------------------+-----------+----------+-------------------------------------
+ id     | integer           |           | not null | nextval('animals_id_seq'::regclass)
+ name   | character varying |           | not null |
+ gender | character varying |           |          |
+Indexes:
+    "animals_pkey" PRIMARY KEY, btree (id)
+
+postgres=# insert into animals(name,gender)values('Dog','male');
+INSERT 0 1
+postgres=# \d animals
+                                 Table "public.animals"
+ Column |       Type        | Collation | Nullable |               Default
+--------+-------------------+-----------+----------+-------------------------------------
+ id     | integer           |           | not null | nextval('animals_id_seq'::regclass)
+ name   | character varying |           | not null |
+ gender | character varying |           |          |
+Indexes:
+    "animals_pkey" PRIMARY KEY, btree (id)
+
+postgres=# \d animals
+                                 Table "public.animals"
+ Column |       Type        | Collation | Nullable |               Default
+--------+-------------------+-----------+----------+-------------------------------------
+ id     | integer           |           | not null | nextval('animals_id_seq'::regclass)
+ name   | character varying |           | not null |
+ gender | character varying |           |          |
+Indexes:
+    "animals_pkey" PRIMARY KEY, btree (id)
+
+postgres=# select * from animals;
+ id | name | gender
+----+------+--------
+  1 | Dog  | male
+(1 row)
+
+postgres=# create table developers(id serial primary key,first_name varchar(50) unique,last_name varchar(50),language varchar);
+CREATE TABLE
+postgres=# insert into developers values('Nuradil','Zholdoshov','Java');
+ERROR:  invalid input syntax for type integer: "Nuradil"
+LINE 1: insert into developers values('Nuradil','Zholdoshov','Java')...
+                                      ^
+postgres=# insert into developers(first_name,last_name,language)values('Nuradil','Zholdoshov','Java');
+INSERT 0 1
+postgres=# select * from developers;
+ id | first_name | last_name  | language
+----+------------+------------+----------
+  1 | Nuradil    | Zholdoshov | Java
+(1 row)
+
+postgres=# create table actor(id serial primary key,actor_name varchar(100) not null,age int);
+CREATE TABLE
+postgres=# insert into actor(actor_name,age)values('Leonardo DiKaprio',45);
+INSERT 0 1
+postgres=# insert into actor(actor_name,age)values('Denzel Vshigton',50);
+INSERT 0 1
+postgres=# select * from actor;
+ id |    actor_name     | age
+----+-------------------+-----
+  1 | Leonardo DiKaprio |  45
+  2 | Denzel Vshigton   |  50
+(2 rows)
+
+postgres=# create table movie(id serial primary key,movie_name varchar(150) not null,genre varchar(100),actor int references actor(id));
+CREATE TABLE
+postgres=# insert into(movie_name,genre,actor)values('Great equalizer','thriller',2);
+ERROR:  syntax error at or near "("
+LINE 1: insert into(movie_name,genre,actor)values('Great equalizer',...
+                   ^
+postgres=# insert into movie(movie_name,genre,actor)values('Great equalizer','thriller',2);
+INSERT 0 1
+postgres=# select * from movie;
+ id |   movie_name    |  genre   | actor
+----+-----------------+----------+-------
+  1 | Great equalizer | thriller |     2
+(1 row)
+
+postgres=# create table group(id serial primary key,name varchar(100) unique not null,instructor int references instructors(id),students int references students(id));
+ERROR:  syntax error at or near "group"
+LINE 1: create table group(id serial primary key,name varchar(100) u...
+                     ^
+postgres=# create table grouping (id serial primary key,group_name varchar,id_instructor int references instructors(id),students_id int references students(id));
+CREATE TABLE
+postgres=# create table mentors(id serial primary key,fullname varchar(150) not null);
+CREATE TABLE
+postgres=# insert into mentors(fullname)values ('Mukhammed Toichubaev');
+INSERT 0 1
+postgres=# insert into mentors(fullmame)values ('Rahim Kurbanov');
+ERROR:  column "fullmame" of relation "mentors" does not exist
+LINE 1: insert into mentors(fullmame)values ('Rahim Kurbanov');
+                            ^
+postgres=# insert into mentors(fullmame)values ('Rahim Kurbanov');
+ERROR:  column "fullmame" of relation "mentors" does not exist
+LINE 1: insert into mentors(fullmame)values ('Rahim Kurbanov');
+                            ^
+postgres=# insert into mentors(fullname)values('Rahim Kurbanov');
+INSERT 0 1
+postgres=# select *from mentors;
+ id |       fullname
+----+----------------------
+  1 | Mukhammed Toichubaev
+  2 | Rahim Kurbanov
+(2 rows)
+
+postgres=# alter table grouping add mentors_id;
+ERROR:  syntax error at or near ";"
+LINE 1: alter table grouping add mentors_id;
+                                           ^
+postgres=# alter table grouping add mentors_id int references mentors(id);
+ALTER TABLE
+postgres=# select * from grouping;
+ id | group_name | id_instructor | students_id | mentors_id
+----+------------+---------------+-------------+------------
+(0 rows)
+
+postgres=# insert into grouping(group_name,id_instructor,students_id,mentors_id)values('Java-8',1,1,1);
+INSERT 0 1
+postgres=# select * from grouping;
+ id | group_name | id_instructor | students_id | mentors_id
+----+------------+---------------+-------------+------------
+  1 | Java-8     |             1 |           1 |          1
+(1 row)
+
+postgres=#

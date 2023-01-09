@@ -1,0 +1,53 @@
+CREATE TABLE country (
+id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE city(
+id SERIAL PRIMARY KEY,
+	name VARCHAR(100),
+	population INT NOT NULL,
+	id_country INT REFERENCES country(id)
+);
+
+
+SELECT * FROM country;
+SELECT * FROM city;
+
+INSERT INTO city(name,population,id_country)
+VALUES('Bishkek',50000,1),
+('Talas',70000,1),
+('Issyk-Kull',800000,1);
+
+INSERT INTO country(name)
+VALUES('Kyrgyzstan');
+
+
+
+CREATE TABLE market(
+id SERIAL PRIMARY KEY,
+	name VARCHAR(100) NOT NULL,
+	id_city INT REFERENCES city(id),
+	address VARCHAR(200) NOT NULL
+);
+
+SELECT * FROM market;
+
+INSERT INTO market(name,id_city,address)
+VALUES('Globus',1,'Karpinka'),
+('Frunze',2,'Kirovskoe');
+
+
+
+CREATE TABLE hostel(
+	id SERIAL PRIMARY KEY,
+	name  VARCHAR(150) NOT NULL,
+	city_id INT REFERENCES city(id)
+);
+
+INSERT INTO hostel(name,city_id)
+VALUES('Avangard',3);
+
+SELECT * FROM hostel;
+
+

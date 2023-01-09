@@ -1,0 +1,144 @@
+CREATE TABLE job
+(
+    id          SERIAL PRIMARY KEY,
+    professions VARCHAR(80) UNIQUE
+);
+
+CREATE TABLE employee
+(
+    id            SERIAL PRIMARY KEY,
+    first_name    VARCHAR(50) NOT NULL,
+    last_name     VARCHAR(50),
+    email         VARCHAR(70) UNIQUE,
+    date_of_birth VARCHAR(50),
+    job_id        INTEGER REFERENCES job (id)
+);
+
+SELECT *
+FROM job;
+SELECT *
+FROM employee;
+
+
+INSERT INTO job(professions)
+VALUES ('developerr'),
+       ('business_man'),
+       ('Taxi');
+
+
+INSERT INTO employee(first_name, last_name, email, date_of_birth, id)
+VALUES ('Dastan', 'Akbaraliev', 'das@gmail.com', '2003-3-5'),
+       ('Ilim', 'Shabdanov', 'ilim2gmail.com', '2003-4-6'),
+       ('Sanzjar', 'Abdymomunov', 'san2gmail.com', '2004-4-6');
+
+CREATE TABLE person
+(
+    id    SERIAL PRIMARY KEY,
+    name  VARCHAR(50) NOT NULL,
+    age   INT,
+    email VARCHAR(70) UNIQUE
+);
+
+INSERT INTO person(name, age, email)
+VALUES ('NURADIL', 18, 'nurik2gmail.com');
+
+SELECT *
+FROM person;
+
+
+CREATE TABLE courses
+(
+    id             SERIAL PRIMARY KEY,
+    name_of_course VARCHAR
+);
+
+CREATE TABLE instructors
+(
+    id         SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name  VARCHAR(50),
+    experience VARCHAR(70),
+    course     INT REFERENCES courses (id)
+);
+
+CREATE TABLE students
+(
+    id            SERIAL PRIMARY KEY,
+    fist_name     VARCHAR(50) NOT NULL,
+    last_name     VARCHAR(50),
+    instructor_id INT REFERENCES instructors (id)
+);
+
+SELECT *
+FROM courses;
+SELECT *
+FROM instructors;
+SELECT *
+FROM students;
+
+INSERT INTO courses(name_of_course)
+VALUES ('Java'),
+       ('JS'),
+       ('Python');
+
+INSERT INTO instructors(first_name, last_name, experience)
+VALUES ('Aijamal', 'Asangazieva', '3 year'),
+       ('Mukhammed', null, '2 year'),
+       ('Rahim', null, '2 year');
+
+INSERT INTO students(fist_name, last_name)
+VALUES ('Nuradil', 'Zholdoshov'),
+       ('Ilim', null),
+       ('Dastan', null);
+
+CREATE TABLE cars
+(
+    id    SERIAL PRIMARY KEY,
+    name  VARCHAR(100) NOT NULL,
+    price INT          NOT NULL
+);
+
+CREATE TABLE driver
+(
+    id         SERIAL PRIMARY KEY,
+    name       VARCHAR(50) NOT NULL,
+    experience INT         NOT NULL,
+    car_id     INT REFERENCES cars (id)
+);
+
+SELECT *
+FROM cars;
+SELECT *
+FROM driver;
+
+INSERT INTO cars(name, price)
+VALUES ('FIT', 1000),
+       ('MATIZ', 900);
+
+INSERT INTO driver(name, experience, car_id)
+VALUES ('Ilim', 3, 2),
+       ('Dastan', 4, 1);
+
+CREATE TABLE author(
+    id SERIAL PRIMARY KEY ,
+    full_name VARCHAR(200) UNIQUE  NOT NULL ,
+    id_books INT REFERENCES books(id)
+);
+
+CREATE TABLE books(
+    id SERIAL PRIMARY KEY ,
+    name VARCHAR(100) NOT NULL ,
+    genre VARCHAR(100) NOT NULL ,
+    price INT NOT NULL
+);
+
+SELECT * FROM books;
+SELECT *FROM author;
+
+INSERT INTO books(name, genre, price)
+VALUES ('Honey and milk','Novel',500),
+       ('Bonds of memory','Thriller',400);
+
+INSERT INTO author(full_name, id_books)
+VALUES ('Sidney Sheldon',2),
+       ('Rupi Kaur',1);
